@@ -1,0 +1,169 @@
+openapi: 3.0.0
+info:
+  title: My Cruise API
+  description: API for retrieving cruise data based on various filters and sorting options
+  version: 1.0.0
+
+servers:
+  - url: https://my-cruise-api-z6j7wv2s2a-ue.a.run.app/
+
+paths:
+  /cruises:
+    get:
+      summary: Fetch cruise data
+      description: Fetches and processes cruise data based on the specified filters and sorting options
+      operationId: fetchCruiseData
+      parameters:
+        - name: destination
+          in: query
+          description: Filter by specific destination name
+          schema:
+            type: string
+            example: Caribbean
+        - name: from_port
+          in: query
+          description: Filter by departure port name
+          schema:
+            type: string
+            example: Miami
+        - name: cruise_line
+          in: query
+          description: Filter by cruise line's name
+          schema:
+            type: string
+            example: Royal Caribbean International
+        - name: duration
+          in: query
+          description: Filter by exact cruise duration (in days)
+          schema:
+            type: integer
+            example: 7
+        - name: ship
+          in: query
+          description: Filter by the ship's name
+          schema:
+            type: string
+            example: Oasis of the Seas
+        - name: destinationid
+          in: query
+          description: Filter by the destination's ID
+          schema:
+            type: integer
+            example: 3
+        - name: cruise_line_id
+          in: query
+          description: Filter by cruise line's ID
+          schema:
+            type: integer
+            example: 2
+        - name: price
+          in: query
+          description: Filter cruises up to a specific price (in USD)
+          schema:
+            type: number
+            example: 1500
+        - name: min_duration
+          in: query
+          description: Filter cruises with a minimum duration
+          schema:
+            type: integer
+            example: 5
+        - name: max_duration
+          in: query
+          description: Filter cruises with a maximum duration
+          schema:
+            type: integer
+            example: 10
+        - name: day
+          in: query
+          description: Filter cruises by the day of departure
+          schema:
+            type: integer
+            example: 15
+        - name: month
+          in: query
+          description: Filter cruises by the month of departure
+          schema:
+            type: integer
+            example: 6
+        - name: year
+          in: query
+          description: Filter cruises by the year of departure
+          schema:
+            type: integer
+            example: 2023
+        - name: sort_by
+          in: query
+          description: Sort results by a specific column
+          schema:
+            type: string
+            default: Duration
+            example: date_from
+        - name: order
+          in: query
+          description: Sort results in ascending or descending order
+          schema:
+            type: string
+            default: asc
+            example: desc
+        - name: page
+          in: query
+          description: Paginate results
+          schema:
+            type: integer
+            default: 1
+            example: 2
+        - name: limit
+          in: query
+          description: Limit the number of results returned
+          schema:
+            type: integer
+            default: 50
+            example: 10
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:    
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cruise'
+        '400':
+          description: Invalid request parameters
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    Cruise:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the cruise
+        name:
+          type: string
+          description: Name of the cruise
+        destination:
+          type: string
+          description: Destination of the cruise
+        departure_port:
+          type: string
+          description: Departure port of the cruise
+        cruise_line:
+          type: string
+          description: Cruise line operating the cruise
+        ship:
+          type: string
+          description: Ship on which the cruise operates
+        duration:
+          type: integer
+          description: Duration of the cruise in days
+        price:
+          type: number
+          description: Price of the cruise in USD
+        departure_date:
+          type: string
+          format: date
+          description: Departure date of the cruise
